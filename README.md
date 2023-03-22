@@ -1,37 +1,79 @@
-# 巡云轻论坛管理后台前端
+##  Spring Boot 轻论坛后端请移步至 [https://gitee.com/diyhi/bbs-pro](https://gitee.com/diyhi/bbs-pro)
 
-#### 介绍
-巡云轻论坛的配套管理后台前端项目，基于Vite2 + TypeScript + Vue3 + element-plus开发
+<br>
 
-#### 软件架构
-软件架构说明
+## 项目介绍
+巡云轻论坛的配套管理后台前端项目，需要搭配指定版本的后端使用
 
+<br><br>
 
-#### 安装教程
+#### 后端和前端对应兼容版本
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+|  轻论坛后端版本   | 前端版本  |
+|  ----  | ----  |
+| v5.9  | v2023.3.21|
 
-#### 使用说明
+<br><br>
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+#### 技术选型
+Vite2 + TypeScript + Vue3 + element-plus
 
-#### 参与贡献
+官方网站：[http://www.diyhi.com/](http://www.diyhi.com/)
 
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
+演示网站：[http://www.diyhi.com/cms.html](http://www.diyhi.com/cms.html) 页面可获取前后台演示地址、登录账号和密码
 
 
-#### 特技
+服务器部署配置参考：[http://www.diyhi.com/article-10.html](http://www.diyhi.com/article-10.html)
 
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解 Gitee 上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-5.  Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+<br>
+
+
+
+## 源码运行教程
+<br>
+
+**配置后端跨域** 
+<br>
+后端配置跨域有两种方法，可以选择其中一种，注意不要两种方法同时配置
+
+- 方法一（推荐开发时使用）：
+后端java项目配置跨域参数。
+在Spring Boot轻论坛项目里找到crossOrigin.properties文件，将前端的访问地址写入allowedOrigins属性里面。修改完需要重启项目才能生效
+
+<br>
+
+- 方法二（推荐服务器部署时使用）：
+使用Nginx配置跨域。
+参考：[http://www.diyhi.com/article-10.html](前后端分离模板在服务器上部署)链接里的Nginx配置方法
+<br>
+
+
+
+需要先安装node，推荐使用node 16及以上版本。
+
+将本项目源代码下载到您的本地硬盘里，解压出来，进入您的项目目录，打开配置文件.env.development和.env.production，将VITE_API_URL属性值修改为后端访问地址。
+
+然后执行命令
+
+ **安装** 
+```
+npm install
+```
+
+ **运行** 
+```
+npm run dev
+```
+
+ **打包** 
+```
+npm run build
+```
+
+
+
+<br>
+
+
+## 前端界面
+
