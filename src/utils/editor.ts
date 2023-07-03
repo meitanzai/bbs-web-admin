@@ -9,7 +9,6 @@ window.$ = window.jQuery = $;
 
 import "../../public/backstage/kindeditor/kindeditor-min.js";// 富文本编辑器
 
-
 const store = useStore(pinia);
 
 /**
@@ -95,7 +94,6 @@ const store = useStore(pinia);
     //指定要保留的HTML标记和属性。Object的key为HTML标签名，value为HTML属性数组，”.”开始的属性表示style属性。 注意属性要全部小写
     KindEditor.options.htmlTags['hide'] = ['hide-type','input-value','class','description'];
     
-    
     let editor = KindEditor.create(ref, {
     	//basePath : 'kindeditor/',//指定编辑器的根目录路径
     	themeType : 'style :minimalist customization',//极简主题 加冒号的是主题样式文件名称同时也是主题目录
@@ -106,6 +104,7 @@ const store = useStore(pinia);
 		allowImageUpload : true,//true时显示图片上传按钮
 		allowFlashUpload :true,
 		uploadModule : fileStorageSystem,//上传模块 0.本地 10.SeaweedFS 20.MinIO 30.阿里云OSS
+		baseURL:baseURL,//后端地址
 		uploadJson :baseURL+uploadPath,//指定浏览远程图片的服务器端程序
 		filePostName:'file',//文件上传字段 默认imgFile  第三方文件服务器不受本参数影响
 		items : availableTag,

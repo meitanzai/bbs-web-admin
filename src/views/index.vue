@@ -130,6 +130,14 @@
                             <el-menu-item index="4-400400-1">解锁话题隐藏内容分成</el-menu-item>
                             <el-menu-item index="4-400400-2">问答悬赏平台分成</el-menu-item>
                         </el-sub-menu>
+						<el-sub-menu index="4-400600">
+                            <template #title>
+								<el-icon class="icon"><Warning /></el-icon>
+                                <span>举报管理</span>
+                            </template>
+                            <el-menu-item index="4-400600-1">举报分类</el-menu-item>
+                            <el-menu-item index="4-400600-2">举报列表</el-menu-item>
+                        </el-sub-menu>
                     </el-menu>
                     
                     <el-menu v-if="state.topNavigationActiveIndex =='5' || state.mini" :default-active="state.leftNavigationMenuActive" :collapse="state.isLeftNavigationMenuCollapse" text-color="#606266" class="navigation-menu-left" @open="leftNavigationMenuOpen" @close="leftNavigationMenuClose"  @select="leftNavigationMenuSelect" :default-openeds="state.leftNavigationMenuOpeneds">
@@ -248,7 +256,7 @@
 													<el-avatar :icon="UserFilled" />
 												</div>
 												<div class="user-info">
-													<span class="name">{{state.sysUsers.fullName}}</span>
+													<span class="name">{{state.sysUsers.fullName != null && state.sysUsers.fullName != '' ? state.sysUsers.fullName : state.sysUsers.userAccount}}</span>
 													<span class="role">{{state.sysUsers.userDuty}}</span>
 												</div>
 												<div class="more"><el-icon><ArrowDown /></el-icon></div>
@@ -337,6 +345,7 @@
                 ["4-400300", true],
                 ["4-400400", true],
                 ["4-400500", true],
+				["4-400600", true],
                 ["5-500100", true]]
         ),
         
@@ -355,7 +364,7 @@
         }
     }
 		
-    //查询后台管理框架页信息
+    //查询后台管理框架页信息(本页不查询使用的文件存储系统，由App.vue页查询，因为本页在http://127.0.0.1:8080/admin/control/topic/manage/add?visible=true&page= 页查询时比control/topic/manage/add页的结果慢)
     const queryManageFramework = () => {
         
         proxy?.$axios({
@@ -374,10 +383,11 @@
                         for(let key in mapData){
                             if(key == "sysUsers"){
                                 state.sysUsers = mapData[key];
-                            }else if(key == "fileStorageSystem"){
+                            }/**
+							else if(key == "fileStorageSystem"){
                                 let fileStorageSystem = mapData[key];
                                 store.setFileStorageSystem(fileStorageSystem)
-                            }
+                            } */
                         }
                     }else if(returnValue.code === 500){//错误
                         

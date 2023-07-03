@@ -605,6 +605,39 @@ const routes = [
             {path : '/admin/control/topicUnhidePlatformShare/list',component : () => import('@/views/platformShare/topicUnhidePlatformShareList.vue'), name:'topicUnhidePlatformShareList',meta: {index:'4-400400-1',title:'解锁话题隐藏内容分成',cacheNumber:'0'}},//解锁话题隐藏内容分成
             {path : '/admin/control/questionRewardPlatformShare/list',component : () => import('@/views/platformShare/questionRewardPlatformShareList.vue'), name:'questionRewardPlatformShareList',meta: {index:'4-400400-2',title:'问答悬赏平台分成',cacheNumber:'0'}},//问答悬赏平台分成
            
+            {path : '/admin/control/reportType/list',component : () => import('@/views/report/reportTypeList.vue'), name:'reportTypeList',meta: {index:'4-400600-1',title:'举报分类列表',cacheNumber:'0'}},//举报分类列表
+            {path : '/admin/control/reportType/manage/add',component : () => import('@/views/report/addReportType.vue'),name:'addReportType',meta: {parent:'4-400600-1',title:'添加举报分类'},
+                beforeEnter: (to:any, from:any, next:any) => {
+                    const store = useStore(pinia);
+                    if(from.name == 'reportTypeList'){//如果来自举报分类列表,则删除缓存
+                        store.setCacheNumber()
+                    }
+                    next();
+                }
+            },//添加举报分类
+            {path : '/admin/control/reportType/manage/edit',component : () => import('@/views/report/editReportType.vue'),name:'editReportType',meta: {parent:'4-400600-1',title:'修改举报分类'},
+                beforeEnter: (to:any, from:any, next:any) => {
+                    const store = useStore(pinia);
+                    if(from.name == 'reportTypeList'){//如果来自举报分类列表,则删除缓存
+                         store.setCacheNumber()
+                    }
+                    next();
+                }
+            },//修改举报分类
+            {path : '/admin/control/report/list',component : () => import('@/views/report/reportList.vue'), name:'reportList',meta: {index:'4-400600-2',title:'举报列表',cacheNumber:'0'}},//举报列表
+            {path : '/admin/control/report/manage/edit',component : () => import('@/views/report/editReport.vue'),name:'editReport',meta: {parent:'4-400600-2',title:'修改举报'},
+                beforeEnter: (to:any, from:any, next:any) => {
+                    const store = useStore(pinia);
+                    if(from.name == 'reportList'){//如果来自举报列表,则删除缓存
+                        store.setCacheNumber()
+                    }
+                    next();
+                }
+            },//修改举报
+            {path : '/admin/control/topicReport/list',component : () => import('@/views/report/topicReportList.vue'), name:'topicReportList',meta: {parent:'4-400600-2',title:'话题举报列表'}},//话题举报列表
+            {path : '/admin/control/questionReport/list',component : () => import('@/views/report/questionReportList.vue'), name:'questionReportList',meta: {parent:'4-400600-2',title:'问答举报列表'}},//问答举报列表
+            {path : '/admin/control/userReport/list',component : () => import('@/views/report/userReportList.vue'), name:'userReportList',meta: {parent:'4-400600-2',title:'用户举报列表'}},//用户举报列表
+            
             {path : '/admin/control/systemSetting/manage/edit',component : () => import('@/views/setting/editSystemSetting.vue'), name:'editSystemSetting',meta: {index:'5-500100-1',title:'基本设置',cacheNumber:'0'}},//基本设置
             {path : '/admin/control/systemSetting/manage/maintainData',component : () => import('@/views/setting/maintainData.vue'), name:'maintainData',meta: {index:'5-500100-2',title:'维护数据',cacheNumber:'0'}},//维护数据
             {path : '/admin/control/filterWord/manage/view',component : () => import('@/views/setting/viewFilterWord.vue'), name:'viewFilterWord',meta: {index:'5-500100-3',title:'敏感词',cacheNumber:'0'}},//敏感词 

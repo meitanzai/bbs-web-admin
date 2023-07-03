@@ -435,6 +435,16 @@ export interface Reply {
     nickname: string;//呢称
     avatarPath: string;//头像路径
     avatarName: string;//头像名称
+
+    friendReplyId: string;//对方回复Id
+    friendReplyIdGroup: string;//对方回复Id组
+    isFriendStaff: boolean;//对方是否是员工
+    friendUserName: string;//对方用户名称
+    friendAccount: string;//对方账号
+    friendNickname: string;//对方呢称
+    friendAvatarPath: string;//对方头像路径
+    friendAvatarName: string;//对方头像名称
+
     userInfoStatus: number;//用户信息状态
     topicId: string;//话题Id
     topicTitle: string;//话题Id
@@ -540,6 +550,15 @@ export interface AnswerReply {
     avatarName: string;//头像名称
     userInfoStatus: number;//用户信息状态
     userRoleNameList: Array<string>;//用户角色名称集合
+
+    friendReplyId: string;//对方回复Id
+    friendReplyIdGroup: string;//对方回复Id组
+    isFriendStaff: boolean;//对方是否是员工
+    friendUserName: string;//对方用户名称
+    friendAccount: string;//对方账号
+    friendNickname: string;//对方呢称
+    friendAvatarPath: string;//对方头像路径
+    friendAvatarName: string;//对方头像名称
 
     questionId: string;//问题Id
     questionTitle: string;//问题Id
@@ -943,7 +962,16 @@ export interface UserLoginLog {
     ipAddress: string;//IP归属地
 }
 
-
+//举报分类
+export interface ReportType  {
+    id: string;//Id
+    name: string;//分类名称
+    sort: number;//排序
+    parentId: string;//所属父类Id
+    childNodeNumber: number;//子节点数量
+    childType:Array<ReportType>;//子分类
+    giveReason: boolean;//是否需要说明理由
+}
 
 //允许注册账号类型
 export interface AllowRegisterAccount {
@@ -1035,4 +1063,43 @@ export interface SendService{
     alidayu_templateCode: string;//阿里大于短信模板代码
     alidayu_variable: Map<string,string>;//阿里大于支持变量 key:变量字段  value:备注
     serviceName: string;//服务名称
+}
+
+//举报分类
+export interface ReportType {
+    id: string;//Id
+    name: string;//分类名称
+    parentId: string;//所属父类Id
+    childType: Array<ReportType>;//子分类
+    sort: number;//排序
+    giveReason:boolean;//是否需要说明理由
+    childNodeNumber: number;//子节点数量
+    parentIdGroup: number;//父Id组
+}
+
+//举报
+export interface Report{
+    id: string;//Id
+    userId: string;//用户Id
+    userName: string;//用户名称
+    account: string;//账号
+    nickname: string;//呢称
+    avatarPath: string;//头像路径
+    avatarName: string;//头像名称
+    staffAccount: string;//处理举报的员工账号
+    reportTypeId: string;//举报分类Id
+    reportTypeName: string;//举报分类名称
+    parameterId: string;//参数Id
+    extraParameterId: string;//扩展参数Id
+    module: number;//模块
+    reason: string;//举报理由
+    processResult: string;//处理结果
+    remark: string;//备注
+    imageInfoList: Array<ImageInfo>;//图片信息集合
+    postTime: string;//举报时间
+    ip: string;//IP
+    ipAddress: string;//IP归属地
+    processCompleteTime: string;//处理完成时间
+    status: number;//处理状态
+    version: number;//版本号
 }

@@ -291,7 +291,7 @@
             url: '/admin/login',
             method: 'post',
             data: formData,  
-            showLoading: false,//是否显示加载图标
+         //   showLoading: false,//是否显示加载图标
             loadingMask:false,// 是否显示遮罩层
         })
         .then((response: AxiosResponse) => {

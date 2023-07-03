@@ -29,6 +29,7 @@
             <el-button type="primary" plain @click="$router.push({path: '/admin/control/paymentLog/list', query:{ id : $route.query.id,userName : encodeURIComponent(state.user.userName),beforeUrl:($route.query.beforeUrl != undefined ? $route.query.beforeUrl:'')}})">支付日志</el-button>
             
             <el-button type="primary" plain @click="rechargeUI()">充值</el-button>
+            <el-button type="primary" plain @click="$router.push({path: '/admin/control/userReport/list', query:{ id : $route.query.id,userName : encodeURIComponent(state.user.userName),beforeUrl:($route.query.beforeUrl != undefined ? $route.query.beforeUrl:'')}})">举报</el-button>
             
             <el-button type="primary" plain @click="$router.push({path: '/admin/control/userLoginLog/list', query:{ id : $route.query.id,userName : encodeURIComponent(state.user.userName),beforeUrl:($route.query.beforeUrl != undefined ? $route.query.beforeUrl:'')}})">登录日志</el-button>
             <el-button type="primary" plain @click="changeAvatarUI()">更换头像</el-button>

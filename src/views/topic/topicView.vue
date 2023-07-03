@@ -15,10 +15,11 @@
                 
                 <div class="operat">
                     <el-link class="item" href="javascript:void(0);" v-if="state.topic.status == 10" @click="auditTopic(state.topic.id);">审核</el-link>
-                    <el-link class="item" href="javascript:void(0);" @click="$router.push({path: '/admin/control/topicLike/list', query:{ visible:($route.query.visible != undefined ? $route.query.visible:''),topicView_beforeUrl:($route.query.topicView_beforeUrl != undefined ? $route.query.topicView_beforeUrl:''),topicId :state.topic.id, commentId:($route.query.commentId != undefined ? $route.query.commentId:''),page:($route.query.page != undefined ? $route.query.page:''), topicPage:($route.query.page != undefined ? $route.query.page:'')}})">点赞用户</el-link>
-                    <el-link class="item" href="javascript:void(0);" v-if="state.topic.giveRedEnvelopeId != null && state.topic.giveRedEnvelopeId != ''" @click="$router.push({path: '/admin/control/redEnvelope/redEnvelopeAmountDistribution/list', query:{giveRedEnvelopeId:state.topic.giveRedEnvelopeId, visible:($route.query.visible != undefined ? $route.query.visible:''),topicView_beforeUrl:($route.query.topicView_beforeUrl != undefined ? $route.query.topicView_beforeUrl:''),topicId :state.topic.id, commentId:($route.query.commentId != undefined ? $route.query.commentId:''),page:($route.query.page != undefined ? $route.query.page:''), topicPage:($route.query.page != undefined ? $route.query.page:'')}})">红包</el-link>
-                    <el-link class="item" href="javascript:void(0);" @click="$router.push({path: '/admin/control/topicFavorite/list', query:{ visible:($route.query.visible != undefined ? $route.query.visible:''),topicView_beforeUrl:($route.query.topicView_beforeUrl != undefined ? $route.query.topicView_beforeUrl:''),topicId :state.topic.id, commentId:($route.query.commentId != undefined ? $route.query.commentId:''),page:($route.query.page != undefined ? $route.query.page:''), topicPage:($route.query.page != undefined ? $route.query.page:'')}})">收藏用户</el-link>
-                    <el-link class="item" href="javascript:void(0);" @click="store.setCacheNumber(); $router.push({path: '/admin/control/topic/topicUnhideList', query:{ visible:($route.query.visible != undefined ? $route.query.visible:''),topicView_beforeUrl:($route.query.topicView_beforeUrl != undefined ? $route.query.topicView_beforeUrl:''),topicId :state.topic.id, commentId:($route.query.commentId != undefined ? $route.query.commentId:''),page:($route.query.page != undefined ? $route.query.page:''), topicPage:($route.query.page != undefined ? $route.query.page:'')}})">解锁隐藏内容用户</el-link>
+                    <el-link class="item" href="javascript:void(0);" @click="$router.push({path: '/admin/control/topicLike/list', query:{ visible:($route.query.visible != undefined ? $route.query.visible:''),topicView_beforeUrl:($route.query.topicView_beforeUrl != undefined ? $route.query.topicView_beforeUrl:''),topicId :state.topic.id, commentId:($route.query.commentId != undefined ? $route.query.commentId:''),topicPage:($route.query.page != undefined ? $route.query.page:'')}})">点赞用户</el-link>
+                    <el-link class="item" href="javascript:void(0);" v-if="state.topic.giveRedEnvelopeId != null && state.topic.giveRedEnvelopeId != ''" @click="$router.push({path: '/admin/control/redEnvelope/redEnvelopeAmountDistribution/list', query:{giveRedEnvelopeId:state.topic.giveRedEnvelopeId, visible:($route.query.visible != undefined ? $route.query.visible:''),topicView_beforeUrl:($route.query.topicView_beforeUrl != undefined ? $route.query.topicView_beforeUrl:''),topicId :state.topic.id, commentId:($route.query.commentId != undefined ? $route.query.commentId:''),topicPage:($route.query.page != undefined ? $route.query.page:'')}})">红包</el-link>
+                    <el-link class="item" href="javascript:void(0);" @click="$router.push({path: '/admin/control/topicFavorite/list', query:{ visible:($route.query.visible != undefined ? $route.query.visible:''),topicView_beforeUrl:($route.query.topicView_beforeUrl != undefined ? $route.query.topicView_beforeUrl:''),topicId :state.topic.id, commentId:($route.query.commentId != undefined ? $route.query.commentId:''),topicPage:($route.query.page != undefined ? $route.query.page:'')}})">收藏用户</el-link>
+                    <el-link class="item" href="javascript:void(0);" @click="$router.push({path: '/admin/control/topicReport/list', query:{ visible:($route.query.visible != undefined ? $route.query.visible:''),topicView_beforeUrl:($route.query.topicView_beforeUrl != undefined ? $route.query.topicView_beforeUrl:''),topicId :state.topic.id, commentId:($route.query.commentId != undefined ? $route.query.commentId:''),topicPage:($route.query.page != undefined ? $route.query.page:''), parameterId:state.topic.id,module:10}})">举报</el-link>
+                    <el-link class="item" href="javascript:void(0);" @click="store.setCacheNumber(); $router.push({path: '/admin/control/topic/topicUnhideList', query:{ visible:($route.query.visible != undefined ? $route.query.visible:''),topicView_beforeUrl:($route.query.topicView_beforeUrl != undefined ? $route.query.topicView_beforeUrl:''),topicId :state.topic.id, commentId:($route.query.commentId != undefined ? $route.query.commentId:''),topicPage:($route.query.page != undefined ? $route.query.page:'')}})">解锁隐藏内容用户</el-link>
                     <el-link class="item" href="javascript:void(0);" @click="editTopicUI();">修改</el-link>
                     <el-link class="item" href="javascript:void(0);" @click="deleteTopic(state.topic.id)">删除</el-link>
                     
@@ -127,7 +128,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="main"  >
+                <div class="main" :class="router.currentRoute.value.query.reportModule !=undefined && parseInt(router.currentRoute.value.query.reportModule as string) == 10 ? 'reportMark' : ''">
                     <div v-if="state.topic.lastUpdateTime != null" class="lastUpdateTime" >最后修改时间：{{state.topic.lastUpdateTime}}</div>
                     <div :ref="'topic_'+state.topic.id">
                         <RenderTemplate :html="state.topic.content"></RenderTemplate>
@@ -140,7 +141,7 @@
         
         <div class="commentModule">
             <div class="commentList">
-                <div class="item" v-for="(comment,index) in state.commentList" :key="comment.id" :commentId="comment.id"  :ref="'comment_'+comment.id">
+                <div class="item" :class="router.currentRoute.value.query.reportModule !=undefined && parseInt(router.currentRoute.value.query.reportModule as string) == 20 && comment.id == router.currentRoute.value.query.commentId ? 'reportMark' : ''" v-for="(comment,index) in state.commentList" :key="comment.id" :commentId="comment.id"  :ref="'comment_'+comment.id">
                     <div class="head">
                         <div class="avatarBox">
                             <el-popover effect="light" trigger="hover" placement="top">
@@ -205,103 +206,169 @@
                         </div>
                         
                         <div class="clearfix"></div>
-                         
+                        
                         <div class="replyList" v-if="comment.replyList.length >0">
-                            <ul class="box">
-                                <li v-for="(reply,index2) in comment.replyList" :key="reply.id"  :replyId="reply.id" :ref="handleReplyNodes">
+                            
+                            <ul class="timeline box">
+                                
+                                <li class="timeline-item replyItem-container" v-for="(reply,index2) in comment.replyList" :key="reply.id"  :replyId="reply.id" :ref="handleReplyNodes">
                                     
-                                    <div class="reply-top" >
-                                        <div class="avatarBox">
-                                            <el-popover effect="light" trigger="hover" placement="top">
-                                                <template #default>
-                                                    <p v-if="reply.isStaff == false">呢称: {{reply.nickname}}</p>
-                                                    <p>账号: {{reply.account}}</p>
-                                                    <p v-if="reply.userRoleNameList != null && reply.userRoleNameList.length >0" >角色: 
-                                                        <span class="topicViewModule_topic-wrap_head_topicInfo_userRoleName" v-for="roleName in reply.userRoleNameList" >{{roleName}}</span>
-                                                    </p> 
-                                                    
-                                                    
-                                                </template>
-                                                <template #reference v-if="reply.isStaff == false">
-                                                    <div class="avatar-wrapper" >
-                                                        <div class="avatar-badge" v-if="reply.avatarName == null || reply.avatarName == ''">
-                                                            <el-avatar shape="square" :size="48" :icon="UserFilled"></el-avatar>
+                                    <div class="tail" v-if="state.line.get(reply.id)"></div>
+                                    <div class="node node--normal" v-if="state.dot.get(reply.id)"></div>
+                                    <div class="replyItem">
+                                        <div :class="router.currentRoute.value.query.reportModule !=undefined && parseInt(router.currentRoute.value.query.reportModule as string) == 30 && reply.id == router.currentRoute.value.query.replyId ? 'reply-reportMark' : ''">
+                                            <div class="reply-top" >
+                                                <div class="avatarBox">
+                                                    <el-popover effect="light" trigger="hover" placement="top">
+                                                        <template #default>
+                                                            <p v-if="reply.isStaff == false">呢称: {{reply.nickname}}</p>
+                                                            <p>账号: {{reply.account}}</p>
+                                                            <p v-if="reply.userRoleNameList != null && reply.userRoleNameList.length >0" >角色: 
+                                                                <span class="topicViewModule_topic-wrap_head_topicInfo_userRoleName" v-for="roleName in reply.userRoleNameList" >{{roleName}}</span>
+                                                            </p> 
+                                                            
+                                                            
+                                                        </template>
+                                                        <template #reference v-if="reply.isStaff == false">
+                                                            <div class="avatar-wrapper" >
+                                                                <div class="avatar-badge" v-if="reply.avatarName == null || reply.avatarName == ''">
+                                                                    <el-avatar shape="square" :size="48" :icon="UserFilled"></el-avatar>
+                                                                </div>
+                                                                <div class="avatar-badge" v-if="reply.avatarName != null && reply.avatarName != ''">
+                                                                    <el-avatar shape="square" :size="48" :src="reply.avatarPath+'100x100/'+reply.avatarName"></el-avatar>
+                                                                </div>
+                                                            </div>
+                                                        </template>
+                                                        
+                                                        <template #reference v-if="reply.isStaff == true">
+                                                            <div class="avatar-wrapper">
+                                                                <el-badge value="员工" type="warning" class="avatar-badge">
+                                                                    <el-avatar shape="square" :size="48" :icon="UserFilled"></el-avatar>
+                                                                </el-badge>
+                                                            </div>
+                                                        </template>
+                                                    </el-popover>
+                                                </div>
+                                                <span class="info" >
+                                                    <h2 class="clearfix" >
+                                                        
+                                                        <div class="userName">
+                                                            {{reply.account}}
+                                                            <div class="nickname" >
+                                                                {{reply.nickname}}
+                                                                <i class="userRoleName" v-for="roleName in reply.userRoleNameList" >{{roleName}}</i>
+                                                                <i class="master" v-if="reply.userName == state.topic.userName && reply.isStaff == state.topic.isStaff">作者</i>
+                                                            </div>
                                                         </div>
-                                                        <div class="avatar-badge" v-if="reply.avatarName != null && reply.avatarName != ''">
-                                                            <el-avatar shape="square" :size="48" :src="reply.avatarPath+'100x100/'+reply.avatarName"></el-avatar>
+                                                    </h2>
+                                                    
+                                                    <div class="time clearfix">{{reply.postTime}}</div>
+                                                </span>
+
+                                                
+                                                <span class="friendInfo" v-if="reply.friendUserName != null && reply.friendUserName != ''">
+                                                    <span class="arrow">
+                                                        <el-icon><CaretRight /></el-icon>
+                                                    </span>
+                                                    <div class="friendAvatarBox">
+                                                        <el-popover effect="light" trigger="hover" placement="top">
+                                                            <template #default>
+                                                                <p v-if="reply.isFriendStaff == false">呢称: {{reply.friendNickname}}</p>
+                                                                <p>账号: {{reply.friendAccount}}</p>
+                                                            </template>
+                                                            <template #reference v-if="reply.isFriendStaff == false">
+                                                                <div class="avatar-wrapper" >
+                                                                    <div class="avatar-badge" v-if="reply.friendAvatarName == null || reply.friendAvatarName == ''">
+                                                                        <el-avatar shape="square" :size="48" :icon="UserFilled"></el-avatar>
+                                                                    </div>
+                                                                    <div class="avatar-badge" v-if="reply.friendAvatarName != null && reply.friendAvatarName != ''">
+                                                                        <el-avatar shape="square" :size="48" :src="reply.friendAvatarPath+'100x100/'+reply.friendAvatarName"></el-avatar>
+                                                                    </div>
+                                                                </div>
+                                                            </template>
+                                                            
+                                                            <template #reference v-if="reply.isFriendStaff == true">
+                                                                <div class="avatar-wrapper">
+                                                                    <el-badge value="员工" type="warning" class="avatar-badge">
+                                                                        <el-avatar shape="square" :size="48" :icon="UserFilled"></el-avatar>
+                                                                    </el-badge>
+                                                                </div>
+                                                            </template>
+                                                        </el-popover>
+                                                    </div>
+                                                
+                                                    <h2 class="nameInfo clearfix" >
+                                                        <div class="userName">
+                                                            {{reply.friendAccount}}
+                                                            <div class="nickname" >
+                                                                {{reply.friendNickname}}
+                                                                <i class="master" v-if="reply.friendUserName == state.topic.userName && reply.isFriendStaff == state.topic.isStaff">作者</i>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </template>
+                                                    </h2>
+                                                </span>
                                                 
-                                                <template #reference v-if="reply.isStaff == true">
-                                                    <div class="avatar-wrapper">
-                                                        <el-badge value="员工" type="warning" class="avatar-badge">
-                                                            <el-avatar shape="square" :size="48" :icon="UserFilled"></el-avatar>
-                                                        </el-badge>
-                                                    </div>
-                                                </template>
-                                            </el-popover>
-                                        </div>
-                                        <span class="info" >
-                                            <h2 class="clearfix" >
+                                                <div class="operatInfo">
+                                                    <span class="orange-tag" v-if="reply.status ==10" title="回复状态">待审核</span>
+                                                    <span class="green-tag" v-if="reply.status ==20" title="回复状态">已发布</span>
+                                                    <span class="red-tag" v-if="reply.status ==110" title="回复状态">待审核用户删除</span>
+                                                    <span class="red-tag" v-if="reply.status ==120" title="回复状态">已发布用户删除</span>
+                                                    <span class="red-tag" v-if="reply.status ==100010" title="回复状态">待审核员工删除</span>
+                                                    <span class="red-tag" v-if="reply.status ==100020" title="回复状态">已发布员工删除</span>
+                                                    <el-link class="operat-btn" href="javascript:void(0);" v-if="reply.status ==10"  @click="auditReply(reply.id)">审核</el-link>
+                                                    <el-link class="operat-btn" href="javascript:void(0);" @click="addReplyFriendUI(reply.id)">回复</el-link>
+                                                    <el-link class="operat-btn" href="javascript:void(0);" @click="editReplyUI(reply)">修改</el-link>
+                                                    <el-link class="operat-btn" href="javascript:void(0);" v-if="reply.status >100"  @click="recoveryReply(reply.id)">恢复</el-link>
+                                                    <el-link class="operat-btn" href="javascript:void(0);" @click="$router.push({path: '/admin/control/topicReport/list', query:{ visible:($route.query.visible != undefined ? $route.query.visible:''),topicView_beforeUrl:($route.query.topicView_beforeUrl != undefined ? $route.query.topicView_beforeUrl:''),topicId :state.topic.id, commentId:($route.query.commentId != undefined ? $route.query.commentId:''),topicPage:($route.query.page != undefined ? $route.query.page:''), parameterId:reply.id,module:30}})">举报</el-link>
+                    
+                                                    <el-link class="operat-btn" href="javascript:void(0);" @click="deleteReply(reply.id)">删除</el-link>
                                                 
-                                                <div class="userName">
-                                                    {{reply.account}}
-                                                    <div class="nickname" >
-                                                        {{reply.nickname}}
-                                                        <i class="userRoleName" v-for="roleName in reply.userRoleNameList" >{{roleName}}</i>
-                                                        <i class="master" v-if="reply.userName == state.topic.userName && reply.isStaff == state.topic.isStaff">作者</i>
-                                                    </div>
                                                 </div>
                                                 
-                                            </h2>
+                                            </div>
+                                            <div style="clear:both; height: 0; line-height: 0; font-size: 0;"></div>
                                             
-                                            <div class="time clearfix">{{reply.postTime}}</div>
-                                        </span>
-                                        
-                                        <div class="operatInfo">
-                                            <span class="orange-tag" v-if="reply.status ==10" title="回复状态">待审核</span>
-                                            <span class="green-tag" v-if="reply.status ==20" title="回复状态">已发布</span>
-                                            <span class="red-tag" v-if="reply.status ==110" title="回复状态">待审核用户删除</span>
-                                            <span class="red-tag" v-if="reply.status ==120" title="回复状态">已发布用户删除</span>
-                                            <span class="red-tag" v-if="reply.status ==100010" title="回复状态">待审核员工删除</span>
-                                            <span class="red-tag" v-if="reply.status ==100020" title="回复状态">已发布员工删除</span>
-                                            <el-link class="operat-btn" href="javascript:void(0);" v-if="reply.status ==10"  @click="auditReply(reply.id)">审核</el-link>
-                                            <el-link class="operat-btn" href="javascript:void(0);" @click="editReplyUI(reply)">修改</el-link>
-                                            <el-link class="operat-btn" href="javascript:void(0);" v-if="reply.status >100"  @click="recoveryReply(reply.id)">恢复</el-link>
-                                            <el-link class="operat-btn" href="javascript:void(0);" @click="deleteReply(reply.id)">删除</el-link>
-                                        
-                                        </div>
-                                        
-                                    </div>
-                                    <div style="clear:both; height: 0; line-height: 0; font-size: 0;"></div>
-                                    
-                                    <div class="editCommentReply-formModule" v-show="state.editReplyFormView.get(reply.id)">
-                                        <div class="editReply-wrap">
-                                            <el-form label-width="100"  @submit.native.prevent>
-                                                <el-form-item label="状态" :required="true" >
-                                                    <el-radio-group v-model="state.editReplyStatusField[index][index2]">
-                                                        <el-radio :label="10">待审核</el-radio>
-                                                        <el-radio :label="20">已发布</el-radio>
-                                                    </el-radio-group>
-                                                </el-form-item>
-                                                <el-form-item label="内容" :required="true">
-                                                    <el-input type="textarea" :autosize="{minRows: 5}" placeholder="请输入内容" v-model="state.editReplyContentField[index][index2]"></el-input>
-                                                </el-form-item>
-                                                <el-form-item label=" ">
-                                                    <el-button class="submitButton" size="large" type="primary" @mousedown.native="editReply(reply.id)" :disabled="state.editReply_disabled.get(reply.id)">提交</el-button>
-                                                    <el-button class="submitButton" size="large" type="primary" plain @mousedown.native="cancelEditReply(reply.id);">取消</el-button>
-                                                </el-form-item>
-                                            </el-form>
+                                            <div class="editCommentReply-formModule" v-show="state.editReplyFormView.get(reply.id)">
+                                                <div class="editReply-wrap">
+                                                    <el-form label-width="100"  @submit.native.prevent>
+                                                        <el-form-item label="状态" :required="true" >
+                                                            <el-radio-group v-model="state.editReplyStatusField[index][index2]">
+                                                                <el-radio :label="10">待审核</el-radio>
+                                                                <el-radio :label="20">已发布</el-radio>
+                                                            </el-radio-group>
+                                                        </el-form-item>
+                                                        <el-form-item label="内容" :required="true">
+                                                            <el-input type="textarea" :autosize="{minRows: 5}" placeholder="请输入内容" v-model="state.editReplyContentField[index][index2]"></el-input>
+                                                        </el-form-item>
+                                                        <el-form-item label=" ">
+                                                            <el-button class="submitButton" size="large" type="primary" @mousedown.native="editReply(reply.id)" :disabled="state.editReply_disabled.get(reply.id)">提交</el-button>
+                                                            <el-button class="submitButton" size="large" type="primary" plain @mousedown.native="cancelEditReply(reply.id);">取消</el-button>
+                                                        </el-form-item>
+                                                    </el-form>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="replyContent" @click="clickReplyLevel(comment.id,reply.id)">{{reply.content}}</div>
+
+                                            <!-- 回复对方 -->
+                                            <div class="addReplyFriend-post" v-show="state.addReplyFriendFormView.get(reply.id)">
+                                                <el-form @submit.native.prevent>
+                                                    <el-form-item >
+                                                        <el-input type="textarea" :autosize="{minRows: 5}" placeholder="请输入内容" v-model="state.addReplyFriendContentField[reply.id]"></el-input>
+                                                    </el-form-item>
+                                                    <el-form-item>
+                                                        <el-button class="submitButton" size="large" type="primary" @mousedown.native="addReplyFriend(comment.id,reply.id)" :disabled="state.addReplyFriend_disabled.get(reply.id)">提交</el-button>
+                                                        <el-button class="submitButton" size="large" type="primary" plain @mousedown.native="cancelAddReplyFriend(reply.id);">取消</el-button>
+                                                    </el-form-item>
+                                                </el-form>
+                                            </div>
                                         </div>
                                     </div>
-                                    
-                                    <div class="replyContent">{{reply.content}}</div>
                                 </li>
                             </ul>
-                        </div>             
+                        </div>           
                     </div>
-                    
+                    <!-- 回复评论 -->
                     <div class="addReply-post" v-show="state.addReplyFormView.get(comment.id)">
                         <el-form @submit.native.prevent>
                             <el-form-item >
@@ -370,6 +437,8 @@
                             <el-link class="operat-btn" href="javascript:void(0);" @click="editCommentUI(comment)">修改</el-link>
                             
                             <el-link class="operat-btn" href="javascript:void(0);" v-if="comment.status >100" @click="recoveryComment(comment.id)">恢复</el-link>
+                            <el-link class="operat-btn" href="javascript:void(0);" @click="$router.push({path: '/admin/control/topicReport/list', query:{ visible:($route.query.visible != undefined ? $route.query.visible:''),topicView_beforeUrl:($route.query.topicView_beforeUrl != undefined ? $route.query.topicView_beforeUrl:''),topicId :state.topic.id, commentId:($route.query.commentId != undefined ? $route.query.commentId:''),topicPage:($route.query.page != undefined ? $route.query.page:''), parameterId:comment.id,module:20}})">举报</el-link>
+                   
                             <el-link class="operat-btn" href="javascript:void(0);" @click="deleteComment(comment.id)">删除</el-link>
                             
                             
@@ -458,6 +527,7 @@ export default {
     import DPlayer from 'dplayer';
     import { escapeHtml, escapeVueHtml } from '@/utils/escape';
     import Prism from "prismjs";
+    import { nativeQueryVideoRedirect } from '@/utils/http';
 
 
     const store = useStore(pinia);
@@ -536,7 +606,8 @@ export default {
         addQuote_disabled : new Map(),//提交引用按钮是否禁用 map格式 key:评论Id value:是否禁用
         editComment_disabled : new Map(),//提交修改评论按钮是否禁用 map格式 key:评论Id value:是否禁用
         editTopic_disabled:false,//提交修改话题按钮是否禁用
-        addReply_disabled: new Map(),//提交添加回复按钮是否禁用 map格式 key:一语论Id value:是否禁用
+        addReplyFriend_disabled: new Map(),//提交添加回复按钮是否禁用 map格式 key:一语论Id value:是否禁用
+        addReply_disabled: new Map(),//提交添加回复对方按钮是否禁用 map格式 key:一语论Id value:是否禁用
         editReply_disabled: new Map(),//提交修改回复按钮是否禁用 map格式 key:回复Id value:是否禁用
         
         editReplyStatusField : [] as any, //修改回复状态项绑定(二维数组)
@@ -546,7 +617,13 @@ export default {
         
         addReplyContentField : [] as any, //添加回复内容项绑定
 		addReplyFormView : new Map(),//添加回复表单  key:评论Id value:是否显示
-        
+
+
+        addReplyFriendContentField : {} as any, //添加回复对方内容项绑定 key:回复Id value:内容 示例{回复Id-1 : 内容,回复Id-2 : 内容}
+		addReplyFriendFormView : new Map(),//添加回复对方表单  key:回复Id value:是否显示
+        line : new Map(),//楼中楼的线  key:回复Id value:是否显示
+        dot : new Map(),//楼中楼的点  key:回复Id value:是否显示
+
         sourceUrlObject:{} as SourceUrl,//来源URL对象
     });
     const error = reactive({
@@ -702,7 +779,7 @@ export default {
 											   		avatarHtml += 				"<div class=\"avatar-wrapper\" >";
 											   		if(quote.avatarName == null || quote.avatarName == ''){
 											   			avatarHtml += 				"<div class=\"avatar-badge\" >";
-											   			avatarHtml += 					"<el-avatar shape=\"square\" :size=\"40\" icon=\"el-icon-user-solid\"></el-avatar>";
+											   			avatarHtml += 					"<el-avatar shape=\"square\" :size=\"40\" icon=\"UserFilled\"></el-avatar>";
 											   			avatarHtml += 				"</div>";
 											   		}
 											   		if(quote.avatarName != null && quote.avatarName != ''){
@@ -717,7 +794,7 @@ export default {
 											   		avatarHtml += 			"<template #reference>";
 											   		avatarHtml += 				"<div class=\"avatar-wrapper\" >";   		
 											   		avatarHtml += 					"<el-badge value=\"员工\" type=\"warning\" class=\"avatar-badge\">";
-											   		avatarHtml += 						"<el-avatar shape=\"square\" :size=\"40\" icon=\"el-icon-user-solid\"></el-avatar>";
+											   		avatarHtml += 						"<el-avatar shape=\"square\" :size=\"40\" icon=\"UserFilled\"></el-avatar>";
 											   		avatarHtml += 					"</el-badge>";
 											   		avatarHtml += 				"</div>";
 											   		avatarHtml += 			"</template>";
@@ -773,6 +850,8 @@ export default {
                                                 editReplyContentField_reply_array.push(reply.content);
                                                 
                                                 
+                                                state.addReplyFriendFormView.set(reply.id,false);
+                                                Object.assign(state.addReplyFriendContentField, {[reply.id] : ''});      
                                             }
                                         }
                                         
@@ -785,7 +864,7 @@ export default {
 										state.editReplyContentField[i] = editReplyContentField_reply_array;//把数组editReplyContentField_reply_array作为editReplyContentField数组的元素传入editReplyContentField数组中
                                                             
                                                             
-                                                            
+                                          
 
 
                                         //处理图片放大标签
@@ -801,6 +880,8 @@ export default {
 				    					
 				    					
 				    					state.commentStatusField.push(comment.status);
+
+
 			    					}
 			    					state.commentList = commentList;
 			    				
@@ -945,6 +1026,28 @@ export default {
                                     hls = new Hls();
                                     hls.loadSource(video.src);
                                     hls.attachMedia(video);
+                                    hls.config.xhrSetup = (xhr, url) => {
+                                        if(url.startsWith(store.apiUrl+"videoRedirect?")){//如果访问视频重定向页
+                                            //如果使用重定向跳转时会自动将标头Authorization发送到seaweedfs，seaweedfs会报501错误 A header you provided implies functionality that is not implemented
+                                            //这里发送X-Requested-With标头到后端，让后端返回需要跳转的地址
+                                            let videoRedirectDate = {} as any;
+                                            nativeQueryVideoRedirect(url,function(date:any){
+                                                videoRedirectDate = date;
+                                            });
+
+                                            if(videoRedirectDate != null && Object.keys(videoRedirectDate).length>0 && videoRedirectDate.redirect != ''){
+                                                //告诉hls重新发送ts请求
+                                                xhr.open("GET", videoRedirectDate.redirect, true);//用重定向后的地址请求
+                                                //xhr.setRequestHeader("X-Requested-With", 'XMLHttpRequest');
+                                            }
+                                        }else{
+                                            // 请求ts的url 添加参数 props.fileid
+                                            //url = url + "?t=" + props.fileid;
+                                            // 这一步必须 告诉hls重新发送ts请求
+                                            xhr.open("GET", url, true);
+                                            //xhr.setRequestHeader("X-Requested-With", 'XMLHttpRequest');
+                                        }
+                                    };
                                 },
                             },
                         }
@@ -1172,8 +1275,7 @@ export default {
             console.log(error);
         });
     }
-   
-
+    
     //查询标签
     const queryTagList = (event:any) => {
         if(!state.isAllowLoadTagGroup){
@@ -2003,6 +2105,88 @@ export default {
     }
 
 
+    //添加回复对方表单
+    const addReplyFriendUI = (replyId:string) => {
+        if(state.addReplyFriendFormView.get(replyId) == true){//如果已打开
+            return;
+        }
+        
+        state.addReplyFriendFormView.set(replyId,true);
+ 
+    }
+    //取消添加回复对方
+    const cancelAddReplyFriend = (replyId:string) => {
+        
+        state.addReplyFriendFormView.set(replyId,false);
+        
+    }
+
+     //添加回复对方
+     const addReplyFriend = (commentId:string,replyId:string) => {
+        state.addReplyFriend_disabled.set(replyId,true);
+
+        //清空error的属性值
+        Object.keys(error).map(key => {
+            Object.assign(error, {[key] : ''});
+        })
+
+        let formData = new FormData();
+			
+        formData.append('commentId',  commentId); 
+
+        formData.append('friendReplyId',  replyId); 
+        
+        formData.append('content', state.addReplyFriendContentField[replyId]); 
+
+        proxy?.$axios({
+            url: '/control/comment/manage?method=addReply',
+            method: 'post',
+            data: formData
+        })
+        .then((response: AxiosResponse) => {
+            if(response){
+
+                const result: any = response.data;
+            
+                if(result){
+                    
+                    let returnValue = JSON.parse(result);
+                    if(returnValue.code === 200){//成功
+                        ElMessage({
+                            showClose: true,
+                            message: '提交成功',
+                            type: 'success',
+                            onClose: ()=>{
+                                
+                            }
+                        })
+
+                        //删除缓存
+                        store.setCacheNumber();
+
+                        state.addReplyFriendFormView.set(replyId,false);
+
+                        //清除评论列表
+                        clearCommentList();
+
+			    		queryTopic();
+                    }else if(returnValue.code === 500){//错误
+                        
+                        //处理错误信息
+                        processErrorInfo(returnValue.data as Map<string,string> , reactive({}),()=>{});
+
+                        
+                    }
+                }
+            }
+            state.addReplyFriend_disabled.set(replyId,false);
+        })
+        .catch((error: any) =>{
+            console.log(error);
+            state.addReplyFriend_disabled.set(replyId,false);
+        });
+    }
+
     //添加回复表单
     const addReplyUI = (commentId:string) => {
         if(state.addReplyFormView.get(commentId) == true){//如果已打开
@@ -2018,6 +2202,7 @@ export default {
         state.addReplyFormView.set(commentId,false);
         
     }
+
     //添加回复
     const addReply = (commentId:string) => {
         state.addReply_disabled.set(commentId,true);
@@ -2030,9 +2215,7 @@ export default {
         let formData = new FormData();
 			
         formData.append('commentId',  commentId); 
-        
-        
-        
+
 
         if(state.commentList != null && state.commentList.length > 0){
             for (let i = 0; i <state.commentList.length; i++) {
@@ -2392,7 +2575,8 @@ export default {
     const clearCommentList = () => {
         state.quoteData.clear();
         state.commentList.length =0;
-        state.editReplyContentField = {} as any;
+        state.editReplyContentField = [] as any;
+        state.addReplyFriendContentField = {} as any;
 
         for (const [key, value] of Object.entries(state.editCommentEditorMap)){
             if(value != null){
@@ -2416,7 +2600,113 @@ export default {
         state.quoteFormView.clear();
         state.addReplyFormView.clear();
         state.editReplyFormView.clear();
+
+        state.addReplyFriendFormView.clear();
     }
+
+    //点击回复层级
+    const clickReplyLevel = (commentId:string,replyId:string) => {
+       
+        //是否点击已选中的项
+        let isSelectedItem = false;
+
+
+        if(state.dot.size >0){
+            let lastFriendReplyId = [...state.dot][state.dot.size-1];//最后一个元素
+            if(lastFriendReplyId[0] == replyId){
+                isSelectedItem = true;
+            }
+        }
+
+        state.dot.clear();
+        state.line.clear();
+        if(!isSelectedItem){
+            showReplyLevel(commentId,replyId);
+        }
+        
+    }
+
+    //展示回复层级
+    const showReplyLevel = (commentId:string,replyId:string) => {
+
+        let dotArray = new Array();
+        let replyList = [] as Array<Reply>;
+        if(state.commentList != null && state.commentList.length > 0){
+            A:for (let i = 0; i <state.commentList.length; i++) {
+                let comment = state.commentList[i];
+				
+                 if(comment.id == commentId){
+                    //回复
+                    if(comment.replyList != null && comment.replyList.length >0){
+                        replyList = comment.replyList;
+                        for (let j = 0; j <comment.replyList.length; j++) {
+                            let reply = comment.replyList[j];
+                            if(reply.id == replyId && reply.friendUserName != null && reply.friendUserName != ''){
+                                let friendReplyIdArray = reply.friendReplyIdGroup.split(",");
+                                for (let k = 0; k <friendReplyIdArray.length; k++) {
+                                    let friendReplyId = friendReplyIdArray[k];
+                                    if(friendReplyId != '' && friendReplyId != '0'){
+                                        dotArray.push(friendReplyId);
+                                    }
+                                }
+                                break A;
+                            }
+                        }
+                    }
+                 }                       
+                
+            }
+        }
+
+        //第一个有效层级
+        let firstLevel = '';
+
+        A:for (let i = 0; i <dotArray.length; i++) {
+            let friendReplyId = dotArray[i];
+            for (let j = 0; j <replyList.length; j++) {
+                let reply = replyList[j];
+                if(reply.id == friendReplyId){
+                    firstLevel = friendReplyId;
+                    break A;
+                }
+            }
+        }
+
+        //过滤无效的点
+        A:for (let i = dotArray.length - 1; i >= 0; i--) {
+            let friendReplyId = dotArray[i];
+            for (let j = 0; j <replyList.length; j++) {
+                let reply = replyList[j];
+                if(reply.id == friendReplyId){
+                    continue A;
+                }
+            }
+            dotArray.splice(i, 1);
+        }
+
+        if(dotArray.length >0){
+            for (let i = 0; i <dotArray.length; i++) {
+                let friendReplyId = dotArray[i];
+                state.dot.set(friendReplyId,true);//楼中楼的点
+            }
+            for (let i = 0; i <replyList.length; i++) {
+                let reply = replyList[i];
+                if(reply.id == firstLevel){
+                    state.line.set(reply.id,true);//楼中楼的线
+                    continue;
+                }
+                if(reply.id == replyId){
+                    break;
+                }
+                if(state.line.size >0){
+                    state.line.set(reply.id,true);//楼中楼的线
+                }
+            }
+
+            state.dot.set(replyId,true);//楼中楼点击的层
+        }
+    }
+
 
     onMounted(() => {
         //设置缓存
@@ -2860,6 +3150,17 @@ export default {
             }
 
         }
+        //举报标记
+        .reportMark{
+            &:before{
+                content: " ";
+                position: absolute;
+                top: 0px;
+                left: -8px;
+                bottom:0px;
+                border-left: 5px solid #f89898;
+            }
+        }
     }
     .el-link--default{
         color: #909399 !important;
@@ -3130,6 +3431,18 @@ export default {
                 }
             }
         }
+        //举报标记
+        .reportMark{
+            position:relative;
+            &:before{
+                content: " ";
+                position: absolute;
+                top: 0px;
+                left: -18px;
+                bottom:0px;
+                border-left: 5px solid #f89898;
+            }
+        }
         .replyList {
             padding: 10px 0 0px;
             margin-left: 36px;
@@ -3139,6 +3452,7 @@ export default {
             line-height: 22px;
             margin-top: 20px;
             background: #fbfbfb;
+
             &:before {
                 position: absolute;
                 display: block;
@@ -3156,16 +3470,15 @@ export default {
                 left: 60px
             }
             .box{
-                li {
-                    *zoom: 1;
-                    margin-bottom: 10px;
-                    border-bottom: 1px solid #f1f1f1;
-                    padding-bottom: 5px;
-                    margin-left: 10px;
-                    margin-right:10px;
+                .replyItem-container{
+                    position: relative;
+                    left: -30px;
+
                     &:last-child{
-                        border-bottom: 1px solid #fff;
-                        
+                        //border-bottom: 1px solid #fff;
+                        .replyItem{
+                            border-bottom: 1px solid #fff;
+                        }
                     }
                     &:before,
                     &:after {
@@ -3176,108 +3489,178 @@ export default {
                     &:after {
                         clear: both;
                     }
-                    .reply-top{
-                        position:relative;
-                        .avatarBox{
-                            position:absolute;display:inline-block;
-                            left: 0px;top:6px;
-                            
+                    .replyItem {
+                        margin-bottom: 10px;
+                        border-bottom: 1px solid #f1f1f1;
+                        padding-bottom: 5px;
+                        margin-left: 40px;
+                        margin-right:-20px;
+                        
+                        //举报标记
+                        .reply-reportMark{
+                            position: relative;
+                            &:before{
+                                content: " ";
+                                position: absolute;
+                                top: -10px;
+                                left: -18px;
+                                bottom:-5px;
+                                border-left: 5px solid #f89898;
+                            }
                         }
-                        .el-badge__content.is-fixed{
-                            transform: scale(0.9);right: -24px;top: -9px;
-                        }
-                        .info {
-                            display: block;
-                            float: left;
-                            margin-left: 58px;
-                            h2 {
-                                color:#909399;
-                                font-size:14px;
+                        .reply-top{
+                            position:relative;
+                            .avatarBox{
+                                position:absolute;display:inline-block;
+                                left: 0px;top:6px;
+                                
+                            }
+                            .el-badge__content.is-fixed{
+                                transform: scale(0.9);right: -24px;top: -9px;
+                            }
+                            .info {
+                                display: block;
                                 float: left;
-                                .userName{
-                                    margin-right: 5px;
-                                    position: relative;top: 34px;font-size:14px;
-                                    .nickname{
-                                        position: absolute;top: -20px;left: 0px;white-space: nowrap;font-size:14px;
+                                margin-left: 58px;
+                                h2 {
+                                    color:#909399;
+                                    font-size:14px;
+                                    float: left;
+                                    .userName{
+                                        margin-right: 5px;
+                                        position: relative;top: 34px;font-size:14px;
+                                        .nickname{
+                                            position: absolute;top: -20px;left: 0px;white-space: nowrap;font-size:14px;
+                                        }
                                     }
                                 }
+                                .master{
+                                    white-space:nowrap;
+                                    color:#fff;
+                                    background-color:#4cc8ff;
+                                    border-radius:4px;
+                                    padding:1px 5px;
+                                    font-size: 12px;
+                                    font-style: normal;
+                                    font-weight: normal;
+                                    position: relative;top: -1px;margin-right: 5px;
+                                }
+                                .userRoleName{
+                                    white-space:nowrap;
+                                    color:#e2b46e;
+                                    background-color:#f8e7c4;
+                                    border-radius:4px;
+                                    padding:1px 5px;
+                                    font-size: 12px;
+                                    font-style: normal;
+                                    font-weight: normal;
+                                    position: relative;top: -1px;margin-right: 5px;
+                                }
                             }
-                            .master{
-                                white-space:nowrap;
-                                color:#fff;
-                                background-color:#4cc8ff;
-                                border-radius:4px;
-                                padding:1px 5px;
-                                font-size: 12px;
-                                font-style: normal;
-                                font-weight: normal;
-                                position: relative;top: -1px;margin-right: 5px;
+                            .friendInfo {
+                                display: block;
+                                float: left;
+                                margin-left: 80px;
+                                position:relative;
+                                .arrow{
+                                    float: left;
+                                    color: #b1b3b8;
+                                    position: relative;
+                                    top: 21px;
+                                    left: -45px;
+                                }
+                                .friendAvatarBox{
+                                    position:absolute;display:inline-block;
+                                    left: 0px;top:6px;
+                                }
+
+                                .nameInfo {
+                                    color:#909399;
+                                    font-size:14px;
+                                    float: left;
+                                    margin-left: 42px;
+                                    .userName{
+                                        margin-right: 5px;
+                                        position: relative;top: 34px;font-size:14px;
+                                        .nickname{
+                                            position: absolute;top: -20px;left: 0px;white-space: nowrap;font-size:14px;
+                                        }
+                                    }
+                                }
+                                .master{
+                                    white-space:nowrap;
+                                    color:#fff;
+                                    background-color:#4cc8ff;
+                                    border-radius:4px;
+                                    padding:1px 5px;
+                                    font-size: 12px;
+                                    font-style: normal;
+                                    font-weight: normal;
+                                    position: relative;top: -1px;margin-right: 5px;
+                                }
                             }
-                            .userRoleName{
-                                white-space:nowrap;
-                                color:#e2b46e;
-                                background-color:#f8e7c4;
-                                border-radius:4px;
-                                padding:1px 5px;
-                                font-size: 12px;
-                                font-style: normal;
-                                font-weight: normal;
-                                position: relative;top: -1px;margin-right: 5px;
+                            .time {
+                                color:#909399;float: left;position: relative;top: 34px;margin-left: 5px;font-size:14px;
+                            }
+                            .operatInfo {
+                                float: right;
+                                .operat-btn{
+                                    margin-left: 10px;
+                                    line-height:24px;
+                                    position: relative;
+                                    top: -1px;
+                                }
+                                .green-tag{
+                                    display: inline-block;
+                                    font-size: 14px;
+                                    line-height: 14px;
+                                    padding: 4px 6px 4px 6px;
+                                    border-radius: 3px;
+                                    color:#67C23A;
+                                    background-color:#e1f3d8;
+                                    margin-left: 6px;
+                                }
+                                .orange-tag{
+                                    display: inline-block;
+                                    font-size: 14px;
+                                    line-height: 14px;
+                                    padding: 4px 6px 4px 6px;
+                                    border-radius: 3px;
+                                    color:#E6A23C;
+                                    background-color:#faecd8;
+                                    margin-left: 6px;
+                                }
+                                .red-tag{
+                                    display: inline-block;
+                                    font-size: 14px;
+                                    line-height: 14px;
+                                    padding: 4px 6px 4px 6px;
+                                    border-radius: 3px;
+                                    color:#F56C6C;
+                                    background-color:#fde2e2;
+                                    margin-left: 6px;
+                                }
                             }
                         }
-                        .time {
-                            color:#909399;float: left;position: relative;top: 34px;margin-left: 5px;font-size:14px;
+                        .replyContent{
+                            font-size: 15px;
+                            line-height:26px;
+                            color:#666;
+                            margin-top: 40px;
+                            padding-top: 8px;
+                            padding-bottom: 8px;
+                            word-wrap:break-word;
                         }
-                        .operatInfo {
-                            float: right;
-                            .operat-btn{
-                                margin-left: 10px;
-                                line-height:24px;
-                                position: relative;
-                                top: -1px;
-                            }
-                            .green-tag{
-                                display: inline-block;
-                                font-size: 14px;
-                                line-height: 14px;
-                                padding: 4px 6px 4px 6px;
-                                border-radius: 3px;
-                                color:#67C23A;
-                                background-color:#e1f3d8;
-                                margin-left: 6px;
-                            }
-                            .orange-tag{
-                                display: inline-block;
-                                font-size: 14px;
-                                line-height: 14px;
-                                padding: 4px 6px 4px 6px;
-                                border-radius: 3px;
-                                color:#E6A23C;
-                                background-color:#faecd8;
-                                margin-left: 6px;
-                            }
-                            .red-tag{
-                                display: inline-block;
-                                font-size: 14px;
-                                line-height: 14px;
-                                padding: 4px 6px 4px 6px;
-                                border-radius: 3px;
-                                color:#F56C6C;
-                                background-color:#fde2e2;
-                                margin-left: 6px;
-                            }
+                        /* 添加回复对方  */
+                        .addReplyFriend-post{
+                            margin-top: 35px;
+                            margin-left: 112px;
+                            margin-right:10px;
+                            margin-bottom: 20px;
                         }
-                    }
-                    .replyContent{
-                        font-size: 15px;
-                        line-height:26px;
-                        color:#666;
-                        margin-top: 40px;
-                        padding-top: 8px;
-                        padding-bottom: 8px;
-                        word-wrap:break-word;
                     }
                 }
+                
                 /*修改回复*/
                 .editReply-wrap{
                     position: relative;

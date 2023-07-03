@@ -198,11 +198,19 @@
                         })
 			    		//删除缓存
                         store.setCacheNumber();
+
+                        let page = (router.currentRoute.value.query.page != undefined ? router.currentRoute.value.query.page:'');
+                        
+                        if((router.currentRoute.value.query.sourceParentId == null || router.currentRoute.value.query.sourceParentId == ''
+                            && router.currentRoute.value.query.parentId != null && router.currentRoute.value.query.parentId != '') ){
+                            
+                            page = "1";
+                        }
 			    		router.push({
 							path : '/admin/control/helpType/list',
 							query:{
 								parentId: state.parentId,
-								page:(router.currentRoute.value.query.page != undefined ? router.currentRoute.value.query.page:'')
+								page:page
 							}
 						});
 			    	}else if(returnValue.code === 500){//错误

@@ -41,7 +41,6 @@
                     <el-checkbox v-model="state.allowRegisterAccountObject.local">本地账号密码用户</el-checkbox>
                     <el-checkbox v-model="state.allowRegisterAccountObject.mobile">手机用户</el-checkbox>
                     <el-checkbox v-model="state.allowRegisterAccountObject.weChat">微信用户</el-checkbox>
-                    <el-checkbox v-model="state.allowRegisterAccountObject.other">其他用户</el-checkbox>
                 </el-form-item>
                 <el-form-item label="注册是否需要验证码" :error="error.registerCaptcha" v-show="state.activeTag == 10">
                     <el-radio-group v-model="state.registerCaptcha">
@@ -74,6 +73,14 @@
                 <el-form-item label="发表私信每分钟提交超过" :error="error.privateMessage_submitQuantity" v-show="state.activeTag == 10">
                     <el-col :span="6"><el-input v-model.trim="state.privateMessage_submitQuantity" :required="true" maxlength="8" :clearable="true" show-word-limit></el-input></el-col>
                     <div class="form-help" >0为每次都出现验证码</div>
+                </el-form-item>
+                <el-form-item label="举报每分钟提交超过" :error="error.report_submitQuantity" v-show="state.activeTag == 10">
+                    <el-col :span="6"><el-input v-model.trim="state.report_submitQuantity" :required="true" maxlength="8" :clearable="true" show-word-limit></el-input></el-col>
+                    <div class="form-help" >0为每次都出现验证码</div>
+                </el-form-item>
+                <el-form-item label="举报图片允许最大上传数量" :error="error.reportMaxImageUpload" v-show="state.activeTag == 10">
+                    <el-col :span="6"><el-input v-model.trim="state.reportMaxImageUpload" :required="true" maxlength="8" :clearable="true" show-word-limit></el-input></el-col>
+                    <div class="form-help" >0为不允许上传图片</div>
                 </el-form-item>
                 <el-form-item label="提交问题最多可选择标签数量" :error="error.maxQuestionTagQuantity" v-show="state.activeTag == 10">
                     <el-col :span="6"><el-input v-model.trim="state.maxQuestionTagQuantity" :required="true" maxlength="8" :clearable="true" show-word-limit></el-input></el-col>
@@ -188,6 +195,18 @@
                 </el-form-item>
                 <el-form-item label="实名用户才允许提交答案" :error="error.realNameUserAllowAnswer" v-show="state.activeTag == 10">
                     <el-radio-group v-model="state.realNameUserAllowAnswer">
+                        <el-radio :label="true">是</el-radio>
+                        <el-radio :label="false">否</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item label="全局允许提交举报" :error="error.allowReport" v-show="state.activeTag == 10">
+                    <el-radio-group v-model="state.allowReport">
+                        <el-radio :label="true">是</el-radio>
+                        <el-radio :label="false">否</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item label="是否显示IP归属地" :error="error.showIpAddress" v-show="state.activeTag == 10">
+                    <el-radio-group v-model="state.showIpAddress">
                         <el-radio :label="true">是</el-radio>
                         <el-radio :label="false">否</el-radio>
                     </el-radio-group>
@@ -971,6 +990,8 @@
         question_submitQuantity:'',
         answer_submitQuantity:'',
         privateMessage_submitQuantity:'',
+        report_submitQuantity:'',
+        reportMaxImageUpload:'',
         maxQuestionTagQuantity:'',
         topic_rewardPoint:'',
         comment_rewardPoint:'',
@@ -993,6 +1014,8 @@
         realNameUserAllowComment:false,
         realNameUserAllowQuestion:false,
         realNameUserAllowAnswer:false,
+        allowReport:true,
+		showIpAddress:false,
         questionRewardPointMin:'',
         questionRewardPointMax:'',
         questionRewardAmountMin:'',
@@ -1032,6 +1055,8 @@
         question_submitQuantity:'',
         answer_submitQuantity:'',
         privateMessage_submitQuantity:'',
+        report_submitQuantity:'',
+        reportMaxImageUpload:'',
         maxQuestionTagQuantity:'',
         topic_rewardPoint:'',
         comment_rewardPoint:'',
@@ -1054,6 +1079,8 @@
         realNameUserAllowComment :'',
         realNameUserAllowQuestion :'',
         realNameUserAllowAnswer :'',
+        allowReport :'',
+		showIpAddress :'',
         questionRewardPointMin:'',
         questionRewardPointMax:'',
         questionRewardAmountMin:'',
@@ -1161,6 +1188,12 @@
 			    				if(systemSetting.privateMessage_submitQuantity != null){
 			    					state.privateMessage_submitQuantity = systemSetting.privateMessage_submitQuantity;
 			    				}
+                                if(systemSetting.report_submitQuantity != null){
+			    					state.report_submitQuantity = systemSetting.report_submitQuantity;
+			    				}
+                                if(systemSetting.reportMaxImageUpload != null){
+			    					state.reportMaxImageUpload = systemSetting.reportMaxImageUpload;
+			    				}
 			    				if(systemSetting.maxQuestionTagQuantity != null){
 			    					state.maxQuestionTagQuantity = systemSetting.maxQuestionTagQuantity;
 			    				}
@@ -1209,7 +1242,9 @@
 			    				state.realNameUserAllowComment= systemSetting.realNameUserAllowComment;
 			    				state.realNameUserAllowQuestion= systemSetting.realNameUserAllowQuestion;
 			    				state.realNameUserAllowAnswer= systemSetting.realNameUserAllowAnswer;
-			    				
+			    				state.allowReport = systemSetting.allowReport;
+			    				state.showIpAddress = systemSetting.showIpAddress;
+
 			    				if(systemSetting.questionRewardPointMin != null){
 			    					state.questionRewardPointMin = systemSetting.questionRewardPointMin;
 			    				}
@@ -1446,11 +1481,11 @@
         if(state.supportAccessDevice != null){
             formData.append('supportAccessDevice', String(state.supportAccessDevice));
         }
+        
         if(state.allowRegisterAccountObject != null){
             formData.append('allowRegisterAccountObject.local', state.allowRegisterAccountObject.local.toString());
             formData.append('allowRegisterAccountObject.mobile', state.allowRegisterAccountObject.mobile.toString());
             formData.append('allowRegisterAccountObject.weChat', state.allowRegisterAccountObject.weChat.toString());
-            formData.append('allowRegisterAccountObject.other', state.allowRegisterAccountObject.other.toString());
         }
         
         if(state.registerCaptcha != null){
@@ -1473,6 +1508,12 @@
         }
         if(state.privateMessage_submitQuantity != null){
             formData.append('privateMessage_submitQuantity', state.privateMessage_submitQuantity);
+        }
+        if(state.report_submitQuantity != null){
+            formData.append('report_submitQuantity', state.report_submitQuantity);
+        }
+        if(state.reportMaxImageUpload != null){
+            formData.append('reportMaxImageUpload', state.reportMaxImageUpload);
         }
         if(state.maxQuestionTagQuantity != null){
             formData.append('maxQuestionTagQuantity', state.maxQuestionTagQuantity);
@@ -1533,12 +1574,18 @@
         }
         if(state.realNameUserAllowComment != null){
             formData.append('realNameUserAllowComment', state.realNameUserAllowComment.toString());
-        }
+        } 
         if(state.realNameUserAllowQuestion != null){
             formData.append('realNameUserAllowQuestion', state.realNameUserAllowQuestion.toString());
         }
         if(state.realNameUserAllowAnswer != null){
             formData.append('realNameUserAllowAnswer',state.realNameUserAllowAnswer.toString());
+        }
+        if(state.allowReport != null){
+            formData.append('allowReport', state.allowReport.toString());
+        }
+        if(state.showIpAddress != null){
+            formData.append('showIpAddress', state.showIpAddress.toString());
         }
         if(state.questionRewardPointMin != null){
             formData.append('questionRewardPointMin', state.questionRewardPointMin);
@@ -1552,7 +1599,7 @@
         if(state.questionRewardAmountMax != null){
             formData.append('questionRewardAmountMax', state.questionRewardAmountMax);
         }
-        
+       
         if(state.topicUnhidePlatformShareProportion != null){
             formData.append('topicUnhidePlatformShareProportion', state.topicUnhidePlatformShareProportion);
         }

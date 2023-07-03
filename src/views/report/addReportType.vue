@@ -1,23 +1,29 @@
-<!-- 添加问题标签 -->
+<!-- 添加举报分类 -->
 <template>
     <div class="main">
         <div class="nav-breadcrumb">
             <el-breadcrumb :separator-icon="ArrowRight">
-                <el-breadcrumb-item @click="$router.push({path: '/admin/control/questionTag/list'});">全部标签</el-breadcrumb-item>
-                <el-breadcrumb-item v-for="(value, key) in state.navigation" @click="$router.push({path: '/admin/control/questionTag/list',query:{parentId:key}});">{{value}}</el-breadcrumb-item>
+                <el-breadcrumb-item @click="$router.push({path: '/admin/control/reportType/list'});">全部分类</el-breadcrumb-item>
+                <el-breadcrumb-item v-for="(value, key) in state.navigation" @click="$router.push({path: '/admin/control/reportType/list',query:{parentId:key}});">{{value}}</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="navbar">
-            <el-button type="primary" plain @click="$router.push({path: '/admin/control/questionTag/list',query:{parentId:($route.query.sourceParentId != undefined ? $route.query.sourceParentId:''),page:($route.query.page != undefined ? $route.query.page:'')}})">返回</el-button>
+            <el-button type="primary" plain @click="$router.push({path: '/admin/control/reportType/list',query:{parentId:($route.query.sourceParentId != undefined ? $route.query.sourceParentId:''),page:($route.query.page != undefined ? $route.query.page:'')}})">返回</el-button>
         </div>
         <div class="data-form label-width-blank" >
             <el-form label-width="auto"  @submit.native.prevent>
-                <el-form-item label="父标签名称" v-if="state.parentTag != undefined && state.parentTag != null && Object.keys(state.parentTag).length>0">
-                    {{state.parentTag.name}}
+                <el-form-item label="父分类名称" v-if="state.parentType != undefined && state.parentType != null && Object.keys(state.parentType).length>0">
+                    {{state.parentType.name}}
                 </el-form-item>
-                <el-form-item label="标签名称" :required="true" :error="error.name">
+                <el-form-item label="分类名称" :required="true" :error="error.name">
                     <el-input v-model.trim="state.name" maxlength="50" :clearable="true" show-word-limit></el-input>
                 </el-form-item>
+                <el-form-item label="是否需要说明理由">
+						<el-radio-group v-model="state.giveReason">
+						    <el-radio :label="true">需要</el-radio>
+						    <el-radio :label="false">不需要</el-radio>
+						</el-radio-group>
+					</el-form-item>
                 <el-form-item label="排序" :required="true" :error="error.sort">
                     <el-input-number v-model="state.sort" controls-position="right" :min="0" :max="999999999"></el-input-number>
                     <div class="form-help" >数字越大越在前</div>
@@ -41,7 +47,7 @@
     import { useRouter } from 'vue-router';
     import { ElMessage, } from 'element-plus';
     import { processErrorInfo } from '@/utils/tool';
-    import { QuestionTag } from '@/types';
+    import { ReportType } from '@/types';
     import { ArrowRight } from '@element-plus/icons-vue'
 
     const store = useStore(pinia);
@@ -53,8 +59,9 @@
         parentId:'',
         name :'',
         sort : 0,
-        
-        parentTag :{} as QuestionTag,
+        giveReason : false,
+
+        parentType :{} as ReportType,
         navigation :'',
         submitForm_disabled:false,//提交按钮是否禁用
     });
@@ -66,10 +73,10 @@
 
     
     //查询分类
-    const queryQuestionTag = () => {
+    const queryReportType = () => {
 
         proxy?.$axios({
-            url: '/control/questionTag/manage',
+            url: '/control/reportType/manage',
             method: 'get',
             params: {
                 method : 'add',
@@ -86,8 +93,8 @@
                     if(returnValue.code === 200){//成功
                         let mapData = returnValue.data;
 			    		for(let key in mapData){
-			    			if(key == "parentTag"){
-			    				state.parentTag = mapData[key];
+			    			if(key == "parentType"){
+			    				state.parentType = mapData[key];
 			    			}else if(key == "navigation"){
 			    				state.navigation = mapData[key];
 			    			}
@@ -127,9 +134,13 @@
             formData.append('sort',String(state.sort));
             
         }
+        if(state.giveReason != null){
+            formData.append('giveReason',state.giveReason.toString());
+        }
+			
 
         proxy?.$axios({
-            url: '/control/questionTag/manage?method=add',
+            url: '/control/reportType/manage?method=add',
             method: 'post',
             data: formData,
             //showLoading: false,//是否显示加载图标
@@ -151,6 +162,7 @@
                         })
 			    		//删除缓存
                         store.setCacheNumber();
+
                         let page = (router.currentRoute.value.query.page != undefined ? router.currentRoute.value.query.page:'');
                         
                         
@@ -159,8 +171,9 @@
                             
                             page = "1";
                         }
+
 			    		router.push({
-							path : '/admin/control/questionTag/list',
+							path : '/admin/control/reportType/list',
 							query:{
 								parentId: state.parentId,
 								page:page
@@ -190,7 +203,7 @@
 			state.parentId = router.currentRoute.value.query.parentId as string;
 		}
 		
-		queryQuestionTag();
+		queryReportType();
     }) 
 
 </script>

@@ -156,10 +156,14 @@
                         })
 			    		//删除缓存
                         store.setCacheNumber();
+			    		let parentId = state.parentId;
+                        if(state.parentId == '0'){
+                            parentId = ''
+                        }
 			    		router.push({
 							path : '/admin/control/questionTag/list',
 							query:{
-								parentId: state.parentId,
+								parentId: parentId,
 								page:(router.currentRoute.value.query.page != undefined ? router.currentRoute.value.query.page:'')
 							}
 						});

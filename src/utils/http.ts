@@ -354,3 +354,23 @@ export let refreshToken = function(){
 
 	//});
 };
+
+//原生ajax查询视频重定向（在Hls.js监听事件里调用axios会发生错误，这里用原生方法代替）
+export let nativeQueryVideoRedirect = (url:string,callback:any) =>{
+    let xmlhttp = new window.XMLHttpRequest();
+    xmlhttp.open('GET', url , false);//同步
+    xmlhttp.setRequestHeader("X-Requested-With","XMLHttpRequest");//标记报头为AJAX
+
+    xmlhttp.onreadystatechange = function(){
+        if (xmlhttp.readyState == 4) {//readystate 
+            if(xmlhttp.status == 200){
+                let result = xmlhttp.responseText;
+                if(result != ""){
+                    let date = JSON.parse(result);
+                    callback(date);
+                }
+            }
+        }
+    };
+    xmlhttp.send(null);
+};

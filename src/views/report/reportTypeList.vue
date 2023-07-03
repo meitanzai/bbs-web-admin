@@ -1,32 +1,38 @@
-<!-- 问题标签列表 -->
+<!-- 举报分类列表 -->
 <template>
     <div class="main">
         <div class="nav-breadcrumb">
             <el-breadcrumb :separator-icon="ArrowRight">
-                <el-breadcrumb-item @click="$router.push({path: '/admin/control/questionTag/list'});">全部标签</el-breadcrumb-item>
-                <el-breadcrumb-item v-for="(value, key) in state.navigation" @click="$router.push({path: '/admin/control/questionTag/list',query:{parentId:key}});">{{value}}</el-breadcrumb-item>
+                <el-breadcrumb-item @click="$router.push({path: '/admin/control/reportType/list'});">全部分类</el-breadcrumb-item>
+                <el-breadcrumb-item v-for="(value, key) in state.navigation" @click="$router.push({path: '/admin/control/reportType/list',query:{parentId:key}});">{{value}}</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="navbar">
-            <el-button type="primary" plain @click="$router.push({path: '/admin/control/questionTag/manage/add',query:{sourceParentId:($route.query.parentId != undefined ? $route.query.parentId:''),parentId : state.parentId,  page:($route.query.page != undefined ? $route.query.page:'')}});">添加标签</el-button>
+            <el-button type="primary" plain @click="$router.push({path: '/admin/control/reportType/manage/add',query:{sourceParentId:($route.query.parentId != undefined ? $route.query.parentId:''),parentId : state.parentId, page:($route.query.page != undefined ? $route.query.page:'')}});">添加分类</el-button>
         </div>
         <div class="data-table" >
             <el-table :data="state.tableData" tooltip-effect="dark" style="width: 100%" @cell-click="cellExpandRow"  stripe empty-text="没有内容">
-                <el-table-column label="标签名称">
+                <el-table-column label="分类名称">
                     <template #default="scope">
                         <el-icon class="icon icon-folder" v-if="scope.row.childNodeNumber >0"><Folder /></el-icon>
                         <el-icon class="icon icon-file" v-if="scope.row.childNodeNumber ==0"><Document /></el-icon>
                         {{scope.row.name}}
                     </template>
                 </el-table-column>
-                <el-table-column prop="childNodeNumber" label="下级标签数量" align="center" width="120"></el-table-column>
+                <el-table-column label="需要说明理由" align="center" width="120">
+                    <template #default="scope">
+                        <el-tag effect="dark"  v-if="scope.row.childNodeNumber ==0 && scope.row.giveReason==true" type="success" class="tag-wrapper" >需要</el-tag>
+                        <el-tag effect="dark"  v-if="scope.row.childNodeNumber ==0 && scope.row.giveReason==false" type="info" class="tag-wrapper" > 不需要</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="childNodeNumber" label="下级分类数量" align="center" width="120"></el-table-column>
                 <el-table-column prop="sort" label="排序" align="center" width="100"></el-table-column>
                 <el-table-column label="操作" align="center" width="300">
                     <template #default="scope">
                         <el-button-group>
-                            <el-button type="primary" @click="$router.push({path: '/admin/control/questionTag/manage/add',query:{sourceParentId:($route.query.parentId != undefined ? $route.query.parentId:''), parentId: scope.row.id,page:($route.query.page != undefined ? $route.query.page:'')}});">添加子标签</el-button>
-                            <el-button type="primary" @click="$router.push({path: '/admin/control/questionTag/manage/edit',query:{ sourceParentId:($route.query.parentId != undefined ? $route.query.parentId:''),tagId: scope.row.id,parentId: scope.row.parentId,page:($route.query.page != undefined ? $route.query.page:'')}});">修改</el-button>
-                            <el-button type="primary" @click="deleteTag($event,scope.row)">删除</el-button>
+                            <el-button type="primary" @click="$router.push({path: '/admin/control/reportType/manage/add',query:{sourceParentId:($route.query.parentId != undefined ? $route.query.parentId:''), parentId: scope.row.id,page:($route.query.page != undefined ? $route.query.page:'')}});">添加子分类</el-button>
+                            <el-button type="primary" @click="$router.push({path: '/admin/control/reportType/manage/edit',query:{ sourceParentId:($route.query.parentId != undefined ? $route.query.parentId:''),typeId: scope.row.id,parentId: scope.row.parentId,page:($route.query.page != undefined ? $route.query.page:'')}});">修改</el-button>
+                            <el-button type="primary" @click="deleteType($event,scope.row)">删除</el-button>
                         </el-button-group>
                     </template>
                 </el-table-column>
@@ -69,20 +75,20 @@
 
     //点击单元格选择
     const cellExpandRow = (row:any,column:any,event:any,cell:any) => {
-        if(column.label=="标签名称"){
+        if(column.label=="分类名称"){
             if(row.childNodeNumber >0){
                 //删除缓存
                 store.setCacheNumber();
                 router.push({
-                    path: '/admin/control/questionTag/list', 
+                    path: '/admin/control/reportType/list', 
                     query:{ parentId : row.id,page : 1}
                 });
             }
         }
     }
 
-    //查询标签列表
-    const queryTagList = (parentId:string,page:number) => {
+    //查询分类列表
+    const queryTypeList = (parentId:string,page:number) => {
         //清空内容
         state.tableData = []; 
         state.navigation = '';
@@ -90,7 +96,7 @@
 		state.parentId = parentId;
 
         proxy?.$axios({
-            url: '/control/questionTag/list',
+            url: '/control/reportType/list',
             method: 'get',
             params: {
                 parentId : parentId,
@@ -108,15 +114,15 @@
 			    		let mapData = returnValue.data;
 			    		for(let key in mapData){
 			    			if(key == "pageView"){
-			    				let tagView = mapData[key];
-					    		let tagList = tagView.records;
-					    		if(tagList != null && tagList.length >0){
-					    			state.tableData = tagList;
+			    				let typeView = mapData[key];
+					    		let typeList = typeView.records;
+					    		if(typeList != null && typeList.length >0){
+					    			state.tableData = typeList;
 					 
-					    			state.totalrecord = parseInt(tagView.totalrecord);//服务器返回的long类型已转为String类型
-					    			state.currentpage = tagView.currentpage;
-									state.totalpage = parseInt(tagView.totalpage);//服务器返回的long类型已转为String类型
-									state.maxresult = tagView.maxresult;
+					    			state.totalrecord = parseInt(typeView.totalrecord);//服务器返回的long类型已转为String类型
+					    			state.currentpage = typeView.currentpage;
+									state.totalpage = parseInt(typeView.totalpage);//服务器返回的long类型已转为String类型
+									state.maxresult = typeView.maxresult;
 									state.isShowPage = true;//显示分页栏
 					    		}
 			    			}else if(key == "navigation"){
@@ -136,13 +142,13 @@
         //删除缓存
         store.setCacheNumber();
         router.push({
-            path: '/admin/control/questionTag/list', 
+            path: '/admin/control/reportType/list', 
             query:{ parentId : state.parentId,page : page}
         });
     }
   
-    //删除标签
-    const deleteTag = (event:any,row:any) => {
+    //删除分类
+    const deleteType = (event:any,row:any) => {
         //强制失去焦点
         let target = event.target;
         // 根据button组件内容 里面包括一个span标签，如果设置icon，则还包括一个i标签，其他情况请自行观察。
@@ -161,11 +167,11 @@
         .then(() => {
 
             let formData = new FormData();
-		    formData.append('questionTagId', row.id);
+		    formData.append('reportTypeId', row.id);
         
 
             proxy?.$axios({
-                url: '/control/questionTag/manage?method=delete',
+                url: '/control/reportType/manage?method=delete',
                 method: 'post',
                 data: formData
             })
@@ -186,7 +192,7 @@
                                     
                                 }
                             })
-				    		queryTagList(state.parentId,state.currentpage);
+				    		queryTypeList(state.parentId,state.currentpage);
 				    	}else if(returnValue.code === 500){//错误
 				    		
                             //处理错误信息
@@ -220,7 +226,7 @@
 			state.parentId = router.currentRoute.value.query.parentId as string;
 		}
 		//初始化
-		queryTagList(state.parentId,state.currentpage);
+		queryTypeList(state.parentId,state.currentpage);
 
     }) 
 

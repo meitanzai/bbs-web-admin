@@ -65,9 +65,10 @@
         </div>
         <div class="item">
             <div class="box">
-                <div class="icon-container"></div>
+                <div class="icon-container"><div class="round round_bg_8"><el-icon class="icon color_8"><Warning /></el-icon></div></div>
                 <div class="info-container">
-                    
+                    <div class="digital">{{state.reportCount}}</div>
+                    <div class="text">待处理举报总数</div>
                 </div>
             </div>
         </div>
@@ -105,7 +106,7 @@
         auditAnswerCount: 0,//待审核答案数量
         auditAnswerReplyCount: 0,//待审核答案回复数量	
         feedbackCount: 0,//留言数量
-
+        reportCount: 0,//待处理举报数量
     });
 
     //查询首页
@@ -143,6 +144,8 @@
 			    				state.auditAnswerReplyCount = mapData[key];
 			    			}else if(key == "feedbackCount"){//留言数量
 			    				state.feedbackCount = mapData[key];
+			    			}else if(key == "reportCount"){//待处理举报数量
+			    				state.reportCount = mapData[key];
 			    			}
 			    			
 			    			
