@@ -1104,7 +1104,9 @@ export default {
                     let style = '';
                     if(childNode.getAttribute("width") != null){//如果是表情，表情图不放大
                         style = 'style="width: '+childNode.getAttribute("width")+'; height: '+childNode.getAttribute("height")+'"';
+                        
                         html = '<el-image src="'+store.apiUrl+src+'" '+style+' loading="lazy" ></el-image>';
+                        
                     }else{
                     
                         html = '<el-image src="'+src+'" '+style+' :preview-src-list=["'+src+'"] lazy hide-on-click-modal ></el-image>';
@@ -1137,6 +1139,19 @@ export default {
                     let id = "player_"+random+"_"+i;
                     childNode.setAttribute("id",id);//设置Id
                     state.playerIdList.push(id);	
+                }
+
+                //处理下载
+                if(childNode.nodeName.toLowerCase() == "a" ){
+                    let href = childNode.getAttribute("href")
+                    let title = childNode.innerHTML;
+                    let linkType = childNode.getAttribute("linkType")
+                    //let startUrl = store.apiUrl+"fileDowload?jump=";
+                    if(linkType == "download"  && href != ""){
+                        childNode.setAttribute("class","download");
+                        let downloadHtml ='<Download class="link-icon"></Download>'+escapeHtml(title);
+                        childNode.innerHTML =downloadHtml;
+                    }
                 }
 
                 
@@ -1409,7 +1424,19 @@ export default {
 						
 						}
                     }else if(returnValue.code === 500){//错误
-                        
+                        //修改返回属性
+                        for (const [key, value] of Object.entries(returnValue.data as Map<string,string>) as [string, string][]){
+                            if(key == "content"){
+                                ElMessageBox.alert(value, '错误', {
+                                    type:'error',
+                                    draggable: true,
+                                    dangerouslyUseHTMLString: false,
+                                    showConfirmButton: false
+                                }).catch((error) => {
+                                    console.log(error);
+                                });
+                            }
+                        }
                         //处理错误信息
                         processErrorInfo(returnValue.data as Map<string,string> , reactive({}),()=>{});
 
@@ -3020,6 +3047,18 @@ export default {
             }
             video{
                 width:100%; height: 550px;padding:10px 0px; outline:none;
+            }
+            .download{
+                color: #1890ff;
+                margin: 0 5px 0 5px;
+                cursor: pointer;
+                .link-icon {
+                    position: relative;
+                    top: 4px;
+                    margin-right: 2px;
+                    color:#1890ff;
+                    width: 20px; height: 20px;
+                }
             }
             hide{
                 border: 0;

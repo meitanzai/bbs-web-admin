@@ -1,7 +1,7 @@
 {
   "name": "cms-web-admin",
   "private": true,
-  "version": "2023.7.3",
+  "version": "2023.9.25",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",

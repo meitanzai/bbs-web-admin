@@ -580,7 +580,7 @@ export default {
     import { SourceUrl,Question, Answer, QuestionTag, AppendQuestionItem, AnswerReply } from '@/types';
     import { enc} from 'crypto-js';
     import { UserFilled } from '@element-plus/icons-vue'
-    import { escapeVueHtml } from '@/utils/escape';
+    import { escapeHtml, escapeVueHtml } from '@/utils/escape';
     import Prism from "prismjs";
     import Long from "long";
 
@@ -1003,6 +1003,19 @@ export default {
                     let id = "player_"+random+"_"+i;
                     childNode.setAttribute("id",id);//设置Id
                     state.playerIdList.push(id);	
+                }
+
+                //处理下载
+                if(childNode.nodeName.toLowerCase() == "a" ){
+                    let href = childNode.getAttribute("href")
+                    let title = childNode.innerHTML;
+                    let linkType = childNode.getAttribute("linkType")
+                    //let startUrl = store.apiUrl+"fileDowload?jump=";
+                    if(linkType == "download"  && href != ""){
+                        childNode.setAttribute("class","download");
+                        let downloadHtml ='<Download class="link-icon"></Download>'+escapeHtml(title);
+                        childNode.innerHTML =downloadHtml;
+                    }
                 }
 
                 
@@ -3349,6 +3362,18 @@ export default {
             }
             img{
                 max-width:100%;height:auto;border:none;background:none;padding:0;vertical-align: sub;
+            }
+            .download{
+                color: #1890ff;
+                margin: 0 5px 0 5px;
+                cursor: pointer;
+                .link-icon {
+                    position: relative;
+                    top: 4px;
+                    margin-right: 2px;
+                    color:#1890ff;
+                    width: 20px; height: 20px;
+                }
             }
             table {
                 width: 100%;

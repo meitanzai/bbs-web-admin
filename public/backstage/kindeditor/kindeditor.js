@@ -310,7 +310,17 @@ function _getPageBasePath() {
 	} */
 	return '';   
 }  
+
+//系统表情路径
+function _getSystemBasePath() {   
+	var path = _getPageBasePath();
+	path = path.substring(0, path.lastIndexOf("admin/"));
+	return path;   
+} 
+
+
 K.pageBasePath = _getPageBasePath();
+K.systemBasePath = _getSystemBasePath();
 K.options = {
 	designMode : true,
 	fullscreenMode : false,
@@ -323,6 +333,7 @@ K.options = {
 	themesPath : K.basePath + 'themes/',
 	langPath : K.basePath + 'lang/',
 	pluginsPath : K.basePath + 'plugins/',
+	systemBasePath : K.systemBasePath,
 	themeType : 'default',
 	langType : 'zh-CN',
 	uploadModule : 0,//上传模块 0.本地 10.SeaweedFS 20.MinIO 30.阿里云OSS
@@ -350,7 +361,7 @@ K.options = {
 		'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
 		'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image', 'multiimage',
 		'flash', 'media', 'insertfile', 'table', 'hr', 'emoticons', 'baidumap', 'pagebreak',
-		'anchor', 'link', 'unlink', '|', 'about'
+		'anchor', 'link', 'unlink', '|', 'about', 'toggleEditor'
 	],
 	noDisableItems : ['source', 'fullscreen','embedVideo','uploadVideo'],
 	noToolbarItems : ['embedVideo','uploadVideo','hidePassword','hideComment','hideGrade','hidePoint','hideAmount'],//不在工具栏显示的标签
@@ -8093,6 +8104,7 @@ KindEditor.lang({
 	paste : '粘贴(Ctrl+V)',
 	plainpaste : '粘贴为无格式文本',
 	wordpaste : '从Word粘贴',
+	toggleEditor : '切换编辑器',
 	selectall : '全选(Ctrl+A)',
 	justifyleft : '左对齐',
 	justifycenter : '居中',
@@ -8856,9 +8868,11 @@ KindEditor.plugin('code', function(K) {
 *******************************************************************************/
 KindEditor.plugin('emoticons', function(K) {
 	var self = this, name = 'emoticons',
-		path = (self.emoticonsPath || self.pluginsPath + 'emoticons/twemoji/'),
+		//path = (self.emoticonsPath || self.pluginsPath + 'emoticons/twemoji/'),
+		path = (self.emoticonsPath || self.systemBasePath + 'backstage/kindeditor/plugins/emoticons/twemoji/'),//使用项目public目录下的表情
 		allowPreview = self.allowPreviewEmoticons === undefined ? true : self.allowPreviewEmoticons,
 		currentPageNum = 1;
+
 	self.clickToolbar(name, function() {
 		var rows = 5, //每页显示多少行
 			cols = 9, //每页显示多少列
@@ -11938,6 +11952,24 @@ KindEditor.plugin('wordpaste', function(K) {
 		}
 		iframe[0].contentWindow.focus();
 	});
+});
+
+/*******************************************************************************
+* KindEditor - WYSIWYG HTML Editor for Internet
+* Copyright (C) 2006-2011 kindsoft.net
+* 切换编辑器
+*******************************************************************************/
+KindEditor.plugin('toggleEditor', function(K) {
+	var self = this, name = 'toggleEditor';
+
+	self.clickToolbar(name, function() {
+		if (self.options.afterToggleEditor) {
+			self.options.afterToggleEditor.call(self);
+		}
+		
+	});
+	
+
 });
 
 /**

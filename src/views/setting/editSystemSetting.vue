@@ -37,6 +37,15 @@
                         <el-radio :label="3">移动端</el-radio>
                     </el-radio-group>
                 </el-form-item>
+                <el-form-item label="支持编辑器" :error="error.supportEditor" v-show="state.activeTag == 10" >
+                    <el-radio-group v-model="state.supportEditor">
+                        <el-radio :label="10">仅富文本编辑器</el-radio>
+                        <el-radio :label="20" disabled >仅Markdown编辑器</el-radio>
+                        <el-radio :label="30" disabled >富文本编辑器优先</el-radio>
+                        <el-radio :label="40" disabled >Markdown编辑器优先</el-radio>
+                    </el-radio-group>
+                    <div class="form-help" >仅支持前后端分离模板</div>
+                </el-form-item>
                 <el-form-item label="允许注册账号类型" v-show="state.activeTag == 10">
                     <el-checkbox v-model="state.allowRegisterAccountObject.local">本地账号密码用户</el-checkbox>
                     <el-checkbox v-model="state.allowRegisterAccountObject.mobile">手机用户</el-checkbox>
@@ -211,6 +220,24 @@
                         <el-radio :label="false">否</el-radio>
                     </el-radio-group>
                 </el-form-item>
+                <el-form-item label="话题热度因子加权" :error="error.topicHeatFactor" v-show="state.activeTag == 10">
+                    <el-col :span="12"><el-input v-model.trim="state.topicHeatFactor" maxlength="100" clearable="true" show-word-limit></el-input></el-col>
+                    <div class="form-help" >以竖线符号分割各热度因子，因子的分数越高，在热度因子中占比重越大；如果不设参数，则因子的加权值默认为1；因子加权值“评论|点赞|浏览量”可以为0至9999之间的整数，“重力因子”可以为0.1至2之间的数。示例：评论=20|点赞=10|浏览量=1|重力因子=1.8    </div>
+                </el-form-item>
+                <el-form-item label="热门话题" :error="error.topicHotRecommendedTime" v-show="state.activeTag == 10">
+                    <div class="singleRowTable">
+                        <div class="leftCell">
+                            仅推荐发布
+                        </div>
+                        <div style="width: 150px;">
+                            <el-input v-model.trim="state.topicHotRecommendedTime" maxlength="8" clearable="true" show-word-limit></el-input>
+                        </div>
+                        <div class="rightCell">
+                            小时内的话题
+                        </div>
+                    </div>
+                    <div class="form-help" >空值为不限制</div>
+                </el-form-item>
                 <el-form-item label="解锁话题隐藏内容平台分成比例" :error="error.topicUnhidePlatformShareProportion" v-show="state.activeTag == 10">
                     <el-col :span="6"><el-input v-model.trim="state.topicUnhidePlatformShareProportion" maxlength="3" :clearable="true" show-word-limit></el-input></el-col>
                     <el-col :span="6" style="margin-left: 10px;">%</el-col>
@@ -280,7 +307,7 @@
                         <div class="leftCell">
                             文件上传
                         </div>
-                        <div>
+                        <div style="width: 150px;">
                             <el-input v-model.trim="state.temporaryFileValidPeriod" maxlength="8" :clearable="true" show-word-limit></el-input>
                         </div>
                         <div class="rightCell">
@@ -982,6 +1009,7 @@
         closeSite:1,
         closeSitePrompt:'',
         supportAccessDevice:1,
+        supportEditor:10,
         allowRegisterAccountObject:{} as AllowRegisterAccount,
         registerCaptcha:false,
         login_submitQuantity:'',
@@ -1016,6 +1044,8 @@
         realNameUserAllowAnswer:false,
         allowReport:true,
 		showIpAddress:false,
+        topicHeatFactor:'',
+		topicHotRecommendedTime:'',
         questionRewardPointMin:'',
         questionRewardPointMax:'',
         questionRewardAmountMin:'',
@@ -1047,6 +1077,7 @@
         closeSite :'',
         closeSitePrompt:'',
         supportAccessDevice :'',
+        supportEditor :'',
         allowRegisterAccountObject:'',
         registerCaptcha :'',
         login_submitQuantity:'',
@@ -1081,6 +1112,8 @@
         realNameUserAllowAnswer :'',
         allowReport :'',
 		showIpAddress :'',
+        topicHeatFactor:'',
+		topicHotRecommendedTime:'',
         questionRewardPointMin:'',
         questionRewardPointMax:'',
         questionRewardAmountMin:'',
@@ -1166,6 +1199,7 @@
 			    					state.closeSitePrompt = systemSetting.closeSitePrompt;
 			    				}
 			    				state.supportAccessDevice = systemSetting.supportAccessDevice;
+                                state.supportEditor = systemSetting.supportEditor;
 			    				if(systemSetting.allowRegisterAccountObject != null){
 			    					state.allowRegisterAccountObject = systemSetting.allowRegisterAccountObject;
 			    				}
@@ -1244,7 +1278,12 @@
 			    				state.realNameUserAllowAnswer= systemSetting.realNameUserAllowAnswer;
 			    				state.allowReport = systemSetting.allowReport;
 			    				state.showIpAddress = systemSetting.showIpAddress;
-
+                                if(systemSetting.topicHeatFactor != null){
+			    					state.topicHeatFactor = systemSetting.topicHeatFactor;
+			    				}
+			    				if(systemSetting.topicHotRecommendedTime != null){
+			    					state.topicHotRecommendedTime = systemSetting.topicHotRecommendedTime;
+			    				}
 			    				if(systemSetting.questionRewardPointMin != null){
 			    					state.questionRewardPointMin = systemSetting.questionRewardPointMin;
 			    				}
@@ -1481,7 +1520,9 @@
         if(state.supportAccessDevice != null){
             formData.append('supportAccessDevice', String(state.supportAccessDevice));
         }
-        
+        if(state.supportEditor != null){
+            formData.append('supportEditor', String(state.supportEditor));
+        }
         if(state.allowRegisterAccountObject != null){
             formData.append('allowRegisterAccountObject.local', state.allowRegisterAccountObject.local.toString());
             formData.append('allowRegisterAccountObject.mobile', state.allowRegisterAccountObject.mobile.toString());
@@ -1574,7 +1615,7 @@
         }
         if(state.realNameUserAllowComment != null){
             formData.append('realNameUserAllowComment', state.realNameUserAllowComment.toString());
-        } 
+        }
         if(state.realNameUserAllowQuestion != null){
             formData.append('realNameUserAllowQuestion', state.realNameUserAllowQuestion.toString());
         }
@@ -1586,6 +1627,12 @@
         }
         if(state.showIpAddress != null){
             formData.append('showIpAddress', state.showIpAddress.toString());
+        }
+        if(state.topicHeatFactor != null){
+            formData.append('topicHeatFactor', state.topicHeatFactor);
+        }
+        if(state.topicHotRecommendedTime != null){
+            formData.append('topicHotRecommendedTime', state.topicHotRecommendedTime);
         }
         if(state.questionRewardPointMin != null){
             formData.append('questionRewardPointMin', state.questionRewardPointMin);
@@ -1599,7 +1646,7 @@
         if(state.questionRewardAmountMax != null){
             formData.append('questionRewardAmountMax', state.questionRewardAmountMax);
         }
-       
+        
         if(state.topicUnhidePlatformShareProportion != null){
             formData.append('topicUnhidePlatformShareProportion', state.topicUnhidePlatformShareProportion);
         }
